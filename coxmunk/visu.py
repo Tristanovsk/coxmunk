@@ -92,8 +92,8 @@ def main():
     wind_azi = float(args['--wind_azi'])
     stats = args['--stats']
 
-    vza = np.linspace(0, 80, 80)
-    azi = np.linspace(0, 360, 120)
+    vza = np.linspace(0, 80, 180)
+    azi = np.linspace(0, 360, 180)
     Nvza, Nazi = len(vza), len(azi)
 
     data = np.zeros((Nazi, Nvza))
