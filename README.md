@@ -1,6 +1,7 @@
 # coxmunk
 
-Simple sunglint computation based on Cox and Munk model
+Simple sunglint computation based on [Cox & Munk](https://www.osapublishing.org/josa/abstract.cfm?uri=josa-44-11-838) model.
+For more details on the statistics of the wave slopes (i.e., *Probability Distribution Function*), please refer to [Munk 2009](https://www.annualreviews.org/doi/abs/10.1146/annurev.marine.010908.163940).
 
 
 ## Getting Started
@@ -50,6 +51,11 @@ Usage:
 ```
 
 ## Running the tests
+
+Examples for [Cox & Munk](https://www.osapublishing.org/josa/abstract.cfm?uri=josa-44-11-838) model with [Bréon & Henriot](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2005JC003343) statitics for:
+- solar vieving angle = 39°
+- wind azimuth from Sun = 75°
+- wind speed = 0.2, 7.2, 14.2 m.s<sup>-1</sup>
 
 ```
 $ coxmunk 39 0.2 --stats bh2006 --wind_azi 75
