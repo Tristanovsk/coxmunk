@@ -1,7 +1,7 @@
 ''' Simple sunglint computation for differentr wave slope statistics based on Cox-Munk model
 
 Usage:
-  coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>]
+  coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>] [--figname <figname>]
   coxmunk -h | --help
   coxmunk -v | --version
 
@@ -18,6 +18,7 @@ Options:
                     [default: cm_iso]
   --wind_azi wind_azi  Azimuth of wind direction from the Principal plane
                         [default: 0]
+  --figname figname   Path to save figure (ex: ./illustration/coxmunk_fig_39_14.2_bh2006_75.png)
 
 '''
 
@@ -37,13 +38,13 @@ class plot():
         # ----------------------------
         # set plotting styles
 
-        plt.rcParams.update({'font.size': 16})
+        plt.rcParams.update({'font.size': 18})
 
         if font == None:
             font = {'family': 'serif',
                     'color': 'black',
                     'weight': 'normal',
-                    'size': 22,
+                    'size': 16,
                     }
         self.font = font
 
@@ -51,7 +52,7 @@ class plot():
 
         ax.set_yticks(yticks)
         ax.set_yticklabels(ylabels)
-        ax.set_theta_zero_location("N")
+        ax.set_theta_zero_location("S")
         ax.set_theta_direction(-1)
         return
 
@@ -91,8 +92,9 @@ def main():
     wind = float(args['<wind_speed>'])
     wind_azi = float(args['--wind_azi'])
     stats = args['--stats']
+    figname = args['--figname']
 
-    vza = np.linspace(0, 80, 180)
+    vza = np.linspace(0, 80, 80)
     azi = np.linspace(0, 360, 180)
     Nvza, Nazi = len(vza), len(azi)
 
@@ -102,9 +104,15 @@ def main():
             data[j, i] = coxmunk.sunglint(sza, vza[i], azi[j], m=1.334).sunglint(wind, wind_azi, stats=stats)
 
     cmap = plt.cm.gist_stern_r
-    fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
+
+    fig, ax = plt.subplots(subplot_kw=dict(projection='polar'),figsize=(7, 6))
     plot().add_polplot(ax, vza, azi, data.T, cmap=cmap)
-    plt.show()
+    plt.suptitle(r'Wind speed: {:.1f} m/s; direction: {:.1f} deg.'.format(wind,wind_azi))
+    plt.tight_layout(rect=[0.0, 0.0, 0.99, 0.95])
+    if figname:
+        plt.savefig(figname,dpi=300)
+    else:
+        plt.show()
 
 if __name__ == "__main__":
     main()
