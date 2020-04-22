@@ -58,7 +58,7 @@ Examples for [Cox & Munk](https://www.osapublishing.org/josa/abstract.cfm?uri=jo
 - wind speed = 0.2, 7.2, 14.2 m.s<sup>-1</sup>
 
 ```
-$ coxmunk 39 0.2 --stats bh2006 --wind_azi 75
+$ coxmunk 39 0.2 --stats bh2006 --wind_azi 75 --figname illustration/coxmunk_fig_39_0.2_bh2006_75.png
 ```
 
 ![image_output](illustration/coxmunk_fig_39_0.2_bh2006_75.png)

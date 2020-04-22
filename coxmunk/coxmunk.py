@@ -7,16 +7,17 @@ class sunglint:
     def __init__(self, sza, vza, azi, m=1.334, tau_atm=0):
         '''
 
-        :param sza:
-        :param vza:
-        :param azi: relative azimuth in deg. for convention 0° when Sun and sensor in opposition
-        :param m:
-        :param tau_atm:
+        :param sza: solar zenith angle in deg.
+        :param vza: viewing zenith angle in deg.
+        :param azi: viewing azimuth in deg. for convention 180° when Sun and sensor in opposition;
+                    Sun azimuth set to 0 in the reference frame
+        :param m: refractive index of water
+        :param tau_atm: TODO implement transmittances with optical thickness
         '''
         degrad = np.pi / 180.
         self.sza = sza * degrad
         self.vza = vza * degrad
-        self.azi = (180 - azi) * degrad
+        self.azi = azi * degrad
         self.m = m
         self.tau_atm = tau_atm
 
@@ -66,9 +67,14 @@ class sunglint:
             Pdist = 1. / (np.pi * sigma2) * np.exp(-1. * np.tan(thetaN) ** 2 / sigma2)
         else:
             sigma2 = sc2 + su2
-
-            zy = 1 * (sinv * muazi + sin0) / (mu0 + muv)
+            # zy = muazi*np.tan(thetaN)
+            # zx = sinazi*np.tan(thetaN)
+            zy = -1 * (sinv * muazi + sin0) / (mu0 + muv)
             zx = -1 * (sinv * sinazi) / (mu0 + muv)
+
+            # print('Zy',zy,zy2)
+            # print('Zx',zx,zx2)
+            # print('N',np.tan(thetaN),np.sqrt(zy2**2+zx2**2),np.sqrt(zy**2+zx**2))
 
             zx_prime = np.cos(wazi) * zx + np.sin(wazi) * zy
             zy_prime = -np.sin(wazi) * zx + np.cos(wazi) * zy
@@ -170,10 +176,15 @@ class sunglint:
         return Rf_pol
 
     def scat_angle(self):
+        '''
+        self.azi: azimuth in rad for convention azi=180 when sun-sensenor in oppositioon
+        :return: scattering angle in rad
+        '''
         sza = self.sza
         vza = self.vza
         azi = self.azi
-        ang = np.cos(np.pi - sza) * np.cos(vza) - np.sin(np.pi - sza) * np.sin(vza) * np.cos(azi)
+        ang = -np.cos(sza) * np.cos(vza) - np.sin(sza) * np.sin(vza) * np.cos(azi)
+        #ang = np.cos(np.pi - sza) * np.cos(vza) - np.sin(np.pi - sza) * np.sin(vza) * np.cos(azi)
         ang = np.arccos(ang)
 
         return ang
