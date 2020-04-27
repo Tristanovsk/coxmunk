@@ -2,6 +2,7 @@
 import numpy as np
 from scipy import special
 
+
 class sunglint:
 
     def __init__(self, sza, vza, azi, m=1.334, tau_atm=0):
@@ -33,7 +34,7 @@ class sunglint:
         sza = self.sza
         vza = self.vza
         azi = self.azi
-        wazi = wazi* np.pi / 180.
+        wazi = wazi * np.pi / 180.
 
         muv = np.cos(vza)
         sinv = np.sin(vza)
@@ -49,8 +50,8 @@ class sunglint:
 
         if stats == 'cm_iso':  # Original isotropic Cox Munk statistics
             sigma2 = 3e-3 + 512e-5 * ws
-            sc2 = sigma2/2
-            su2 = sigma2/2
+            sc2 = sigma2 / 2
+            su2 = sigma2 / 2
         elif stats == 'cm_dir':  # historical values from directional COX MUNK
             sc2 = 0.003 + 1.92e-3 * ws
             su2 = 3.16e-3 * ws
@@ -132,12 +133,11 @@ class sunglint:
             Rf = np.matmul(Rf, L1)
             Rf = np.matmul(L2, Rf)
 
-        # TODO: add the shadowing parameterization
-        if shadow and vza!=0:
-            Ls=self.Lambda(su2,sc2,1,sza)
-            Lr=self.Lambda(su2,sc2,muazi**2,vza)
-            print(su2,sc2,muazi**2,vza,Ls,Lr)
-            SH = 1 / (1+Ls+Lr)
+        if shadow and vza != 0:
+            Ls = self.Lambda(su2, sc2, 1, sza)
+            Lr = self.Lambda(su2, sc2, muazi ** 2, vza)
+            print(su2, sc2, muazi ** 2, vza, Ls, Lr)
+            SH = 1 / (1 + Ls + Lr)
         else:
             SH = 1.
 
@@ -199,12 +199,12 @@ class sunglint:
         vza = self.vza
         azi = self.azi
         ang = -np.cos(sza) * np.cos(vza) - np.sin(sza) * np.sin(vza) * np.cos(azi)
-        #ang = np.cos(np.pi - sza) * np.cos(vza) - np.sin(np.pi - sza) * np.sin(vza) * np.cos(azi)
+        # ang = np.cos(np.pi - sza) * np.cos(vza) - np.sin(np.pi - sza) * np.sin(vza) * np.cos(azi)
         ang = np.arccos(ang)
 
         return ang
 
-    def nu(self,sigx2,sigy2,cosphi2,theta):
+    def nu(self, sigx2, sigy2, cosphi2, theta):
         '''
         From Ross & Dion, 2005 and Eq. 15 Ross & Dion, 2007
         :param sigx2
@@ -214,11 +214,11 @@ class sunglint:
         :return:
         '''
 
-        sig = np.sqrt(sigx2*cosphi2+sigy2*(1-cosphi2))
+        sig = np.sqrt(sigx2 * cosphi2 + sigy2 * (1 - cosphi2))
 
-        return 1/(np.tan(theta)*np.sqrt(2)*sig)
+        return 1 / (np.tan(theta) * np.sqrt(2) * sig)
 
-    def Lambda(self,sigx2,sigy2,cosphi2,theta):
+    def Lambda(self, sigx2, sigy2, cosphi2, theta):
         '''
         From Eq. 33b Ross & Dion, 2005 and Eq. 15 Ross & Dion, 2007
         :param sigx2: upwind variance
@@ -228,5 +228,5 @@ class sunglint:
         :return: Lambda
         '''
         piroot = np.sqrt(np.pi)
-        nu = self.nu(sigx2,sigy2,cosphi2,theta)
-        return (np.exp(-nu**2)-nu*piroot*special.erfc(nu)) / (2*nu*piroot)
+        nu = self.nu(sigx2, sigy2, cosphi2, theta)
+        return (np.exp(-nu ** 2) - nu * piroot * special.erfc(nu)) / (2 * nu * piroot)
