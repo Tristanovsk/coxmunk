@@ -1,7 +1,7 @@
 ''' Simple sunglint computation for differentr wave slope statistics based on Cox-Munk model
 
 Usage:
-  coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>] [--figname <figname>]
+  coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>] [--shadow] [--figname <figname>]
   coxmunk -h | --help
   coxmunk -v | --version
 
@@ -18,6 +18,7 @@ Options:
                     [default: cm_iso]
   --wind_azi wind_azi  Azimuth of wind direction from the Principal plane
                         [default: 0]
+  --shadow   If set, computation of the hiding and shadowing effects of wave heights
   --figname figname   Path to save figure (ex: ./illustration/coxmunk_fig_39_14.2_bh2006_75.png)
 
 '''
@@ -92,6 +93,7 @@ def main():
     wind = float(args['<wind_speed>'])
     wind_azi = float(args['--wind_azi'])
     stats = args['--stats']
+    shadow = args['--shadow']
     figname = args['--figname']
 
     vza = np.linspace(0, 80, 80)
@@ -101,7 +103,7 @@ def main():
     data = np.zeros((Nazi, Nvza))
     for i in range(Nvza):
         for j in range(Nazi):
-            data[j, i] = coxmunk.sunglint(sza, vza[i], azi[j], m=1.334).sunglint(wind, wind_azi, stats=stats)
+            data[j, i] = coxmunk.sunglint(sza, vza[i], azi[j], m=1.334).sunglint(wind, wind_azi, stats=stats, shadow=shadow)
 
     cmap = plt.cm.gist_stern_r
 
