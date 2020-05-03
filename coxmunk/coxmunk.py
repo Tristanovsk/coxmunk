@@ -50,49 +50,43 @@ class sunglint:
 
         if stats == 'cm_iso':  # Original isotropic Cox Munk statistics
             sigma2 = 3e-3 + 512e-5 * ws
-            sc2 = sigma2 / 2
-            su2 = sigma2 / 2
+            s_cr2 = sigma2 / 2
+            s_up2 = sigma2 / 2
         elif stats == 'cm_dir':  # historical values from directional COX MUNK
-            sc2 = 0.003 + 1.92e-3 * ws
-            su2 = 3.16e-3 * ws
-            sc = np.sqrt(sc2)
-            su = np.sqrt(su2)
+            s_cr2 = 0.003 + 1.92e-3 * ws
+            s_up2 = 3.16e-3 * ws
+            s_cr = np.sqrt(s_cr2)
+            s_up = np.sqrt(s_up2)
             c21 = 0.01 - 8.6e-3 * ws
             c03 = 0.04 - 33.e-3 * ws
             c40 = 0.40
             c22 = 0.12
             c04 = 0.23
         elif stats == 'bh2006':  # from Breon Henriot 2006 JGR
-            sc2 = 3e-3 + 1.85e-3 * ws
-            su2 = 1e-3 + 3.16e-3 * ws
-            sc = np.sqrt(sc2)
-            su = np.sqrt(su2)
+            s_cr2 = 3e-3 + 1.85e-3 * ws
+            s_up2 = 1e-3 + 3.16e-3 * ws
+            s_cr = np.sqrt(s_cr2)
+            s_up = np.sqrt(s_up2)
             c21 = -9e-4 * ws ** 2
             c03 = -0.45 / (1 + np.exp(7. - ws))
             c40 = 0.30
             c22 = 0.12
             c04 = 0.4
-
         if stats == 'cm_iso':
-            Pdist = 1. / (np.pi * sigma2) * np.exp(-1. * np.tan(thetaN) ** 2 / sigma2)
+            Pdist_ = 1. / (np.pi * sigma2) * np.exp(-1. * np.tan(thetaN) ** 2 / sigma2)
         else:
-            sigma2 = sc2 + su2
-            # zy = muazi*np.tan(thetaN)
-            # zx = sinazi*np.tan(thetaN)
-            zy = -1 * (sinv * muazi + sin0) / (mu0 + muv)
-            zx = -1 * (sinv * sinazi) / (mu0 + muv)
+            sigma2 = s_cr2 + s_up2
 
-            # print('Zy',zy,zy2)
-            # print('Zx',zx,zx2)
-            # print('N',np.tan(thetaN),np.sqrt(zy2**2+zx2**2),np.sqrt(zy**2+zx**2))
+            zx = -1 * (sinv * muazi + sin0) / (mu0 + muv)
+            zy = -1 * (sinv * sinazi) / (mu0 + muv)
 
-            zx_prime = np.cos(wazi) * zx + np.sin(wazi) * zy
-            zy_prime = -np.sin(wazi) * zx + np.cos(wazi) * zy
+            z_up = np.cos(wazi) * zx + np.sin(wazi) * zy
+            z_cr = -np.sin(wazi) * zx + np.cos(wazi) * zy
 
-            xi = zx_prime / sc
-            eta = zy_prime / su
+            eta = z_up / s_up
+            xi = z_cr / s_cr
 
-            Pdist = np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * sc * su) * \
+            Pdist_ = np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up) * \
                     (1. -
                      c21 * (xi ** 2 - 1.) * eta / 2. -
                      c03 * (eta ** 3 - 3. * eta) / 6. +
@@ -103,7 +97,7 @@ class sunglint:
         # ---------------------------------------------------------------------*
         #                    Rotation in the reference plane
         # ---------------------------------------------------------------------*
-        if vza != 0 and sza != 0 and scat != 0:
+        if sinv != 0 and sin0 != 0 and scat != 0:
             L1 = np.zeros((4, 4))
             L2 = np.zeros((4, 4))
             L1[0, 0] = 1.
@@ -111,11 +105,22 @@ class sunglint:
             L2[0, 0] = 1.
             L2[3, 3] = 1.
 
-            cos_sigma1 = (np.cos(np.pi - sza) - muv * np.cos(scat)) / (sinv * np.sin(scat))
-            cos_sigma2 = (muv - np.cos(np.pi - sza) * np.cos(scat)) / (np.sin(np.pi - sza) * np.sin(scat))
+            cos_sigma1 = (-mu0 - muv * np.cos(scat)) / (sinv * np.sin(scat))
+            cos_sigma2 = (muv + mu0 * np.cos(scat)) / (sin0 * np.sin(scat))
+
+            # debug epsilon error in calcumation
+            if cos_sigma1> 1:
+                cos_sigma1=1
+            elif cos_sigma1<-1:
+                cos_sigma1=-1
+            if cos_sigma2> 1:
+                cos_sigma2=1
+            elif cos_sigma2<-1:
+                cos_sigma2=-1
 
             sigma1 = np.arccos(cos_sigma1)
             sigma2 = np.arccos(cos_sigma2)
+
             if (np.sin(azi) > 0):
                 sigma2 = -1 * sigma2
                 sigma1 = -1 * sigma1
@@ -134,9 +139,9 @@ class sunglint:
             Rf = np.matmul(L2, Rf)
 
         if shadow and vza != 0:
-            Ls = self.Lambda(su2, sc2, 1, sza)
-            Lr = self.Lambda(su2, sc2, muazi ** 2, vza)
-            print(su2, sc2, muazi ** 2, vza, Ls, Lr)
+            Ls = self.Lambda(s_up2, s_cr2, 1, sza)
+            Lr = self.Lambda(s_up2, s_cr2, muazi ** 2, vza)
+            # print(s_up2, s_cr2, muazi ** 2, vza, Ls, Lr)
             SH = 1 / (1 + Ls + Lr)
         else:
             SH = 1.
@@ -145,7 +150,7 @@ class sunglint:
         #        Sun glint Stokes component (in reflectance unit) at TOA
         # ---------------------------------------------------------------------*
 
-        Pdist = SH * (np.pi * Pdist) / (4. * mu0 * muv * np.cos(thetaN) ** 4)
+        Pdist = SH * (np.pi * Pdist_) / (4. * mu0 * muv * np.cos(thetaN) ** 4)
 
         Td = 1.
         Tu = 1.
@@ -154,7 +159,10 @@ class sunglint:
         Qglint = Rf[1, 0] * Pdist
         Uglint = Rf[2, 0] * Pdist
 
-        return Iglint
+        if Iglint <= 0:
+            print(Pdist_,np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up) )
+
+        return [Iglint,Qglint,Uglint] #,Rf
 
     def atmo_trans(self, tau, sza, Iglint):
         # ---------------------------------------------------------------------*

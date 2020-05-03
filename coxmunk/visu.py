@@ -54,7 +54,7 @@ class plot():
         ax.set_yticks(yticks)
         ax.set_yticklabels(ylabels)
         ax.set_theta_zero_location("S")
-        ax.set_theta_direction(-1)
+        ax.set_theta_direction(1)
         return
 
     def add_polplot(self, ax, r, theta, values, title="", scale=True, nlayers=50, cmap=cm.cm.delta, colfmt='%0.1e',
@@ -96,25 +96,50 @@ def main():
     shadow = args['--shadow']
     figname = args['--figname']
 
-    vza = np.linspace(0, 80, 80)
-    azi = np.linspace(0, 360, 180)
+    vza = np.linspace(0, 80, 81)
+    azi = np.linspace(0, 360, 181)
     Nvza, Nazi = len(vza), len(azi)
 
-    data = np.zeros((Nazi, Nvza))
+    data = np.zeros((Nazi, Nvza, 3))
     for i in range(Nvza):
         for j in range(Nazi):
-            data[j, i] = coxmunk.sunglint(sza, vza[i], azi[j], m=1.334).sunglint(wind, wind_azi, stats=stats, shadow=shadow)
+            data[j, i, :] = coxmunk.sunglint(
+                sza, vza[i], azi[j], m=1.334).sunglint(
+                wind, wind_azi, stats=stats, shadow=shadow)
 
-    cmap = plt.cm.gist_stern_r
+    # ------------------
+    # plotting section
+    # ------------------
+    fig, axs = plt.subplots(nrows=2, ncols=2, subplot_kw=dict(projection='polar'), figsize=(15, 13))
+    axs = axs.ravel()
+    axs[0].scatter([0], [sza], marker='*', facecolor='orange', alpha=0.6, s=1000)
+    plot().label_polplot(axs[0], yticks=[20., 40., 60., 80.],
+                         ylabels=['$20^{\circ}$', '$40^{\circ}$', '$60^{\circ}$', ''])
 
-    fig, ax = plt.subplots(subplot_kw=dict(projection='polar'),figsize=(7, 6))
-    plot().add_polplot(ax, vza, azi, data.T, cmap=cmap)
-    plt.suptitle(r'Wind speed: {:.1f} m/s; direction: {:.1f} deg.'.format(wind,wind_azi))
+    axs[0].arrow(wind_azi * np.pi / 180, 0, 0, np.max(vza) * max(3,min(16,wind)) / 22, alpha=0.5, width=0.05, head_width=0.25,
+                 head_length=15,
+                 edgecolor='black', facecolor='green', lw=1.2)
+    axs[0].set_title('Sun and wind directions', pad=30)
+
+    for i, title in enumerate(('I', 'Q', 'U')):
+        if title == 'I':
+            cmap = plt.cm.gist_stern_r
+        else:
+            cmap = cm.tools.crop_by_percent(cm.cm.balance, 20, which='both', N=None)
+        plot().add_polplot(axs[i + 1], vza, azi, data[..., i].T, title=title, cmap=cmap)
+    # I=data[...,0].T
+    # Q=data[...,1].T
+    # U=data[...,2].T
+    # DOP = np.sqrt(Q**2+U**2)#/I
+    # plot().add_polplot(axs[3], vza, azi, DOP, title='DOP', cmap=cmap)
+    plt.suptitle(r'Wind speed: {:.1f} m/s; direction: {:.1f} deg.'.format(wind, wind_azi))
     plt.tight_layout(rect=[0.0, 0.0, 0.99, 0.95])
+
     if figname:
-        plt.savefig(figname,dpi=300)
+        plt.savefig(figname, dpi=300)
     else:
         plt.show()
+
 
 if __name__ == "__main__":
     main()
