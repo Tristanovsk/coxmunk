@@ -17,29 +17,33 @@ class sunglint:
         '''
         degrad = np.pi / 180.
         self.sza = sza * degrad
+        self.mu0 = np.cos(self.sza)
+        self.sin0 = np.sin(self.sza)
         self.vza = vza * degrad
         self.azi = azi * degrad
         self.m = m
         self.tau_atm = tau_atm
 
-    def sunglint(self, ws, wazi=0, stats='cm_dir', shadow=True):
+    def sunglint(self, ws, wazi=0, stats='cm_dir', shadow=True, slope=False):
         '''
 
         :param ws: wind speed in m/s
-        :param wazi: wind direction (in deg.) with respect to Sun direction (e.g., wazi=0° wind toward the Sun)
+        :param wazi: wind direction downwind (in deg.) with respect to Sun direction counterclockwise
+                     (e.g., wazi=0° wind direction toward the Sun)
         :param stats: in `cm_iso`, `cm_dir`, `bh2006`
         :param shadow: if True, apply shadow correction based on
+        :param slope: if True outputs are the slope up and cross-wind and the Fresnel value
         :return:
         '''
         sza = self.sza
         vza = self.vza
         azi = self.azi
-        wazi = wazi * np.pi / 180.
+        wazi = (wazi) * np.pi / 180.
 
         muv = np.cos(vza)
         sinv = np.sin(vza)
-        mu0 = np.cos(sza)
-        sin0 = np.sin(sza)
+        mu0 = self.mu0
+        sin0 = self.sin0
         muazi = np.cos(azi)
         sinazi = np.sin(azi)
         scat = self.scat_angle()
@@ -80,19 +84,36 @@ class sunglint:
             zx = -1 * (sinv * muazi + sin0) / (mu0 + muv)
             zy = -1 * (sinv * sinazi) / (mu0 + muv)
 
+            # TODO check why it is clockwise rotation
             z_up = np.cos(wazi) * zx + np.sin(wazi) * zy
             z_cr = -np.sin(wazi) * zx + np.cos(wazi) * zy
 
-            eta = z_up / s_up
-            xi = z_cr / s_cr
+            if False:
+                # convention from Cox & Munk, 1956, and Breon & Henriot, 2006
+                eta = z_up / s_up
+                xi = z_cr / s_cr
 
-            Pdist_ = np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up) * \
-                    (1. -
-                     c21 * (xi ** 2 - 1.) * eta / 2. -
-                     c03 * (eta ** 3 - 3. * eta) / 6. +
-                     c40 * (xi ** 4 - 6. * eta ** 2 + 3.) / 24. +
-                     c04 * (eta ** 4 - 6. * eta ** 2 + 3.) / 24. +
-                     c22 * (xi ** 2 - 1.) * (eta ** 2 - 1.) / 4.)
+                Pdist_ = np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up) * \
+                         (1. -
+                          c21 * (xi ** 2 - 1.) * eta / 2. -
+                          c03 * (eta ** 3 - 3. * eta) / 6. +
+                          c40 * (xi ** 4 - 6. * eta ** 2 + 3.) / 24. +
+                          c04 * (eta ** 4 - 6. * eta ** 2 + 3.) / 24. +
+                          c22 * (xi ** 2 - 1.) * (eta ** 2 - 1.) / 4.)
+
+            else:
+                # convention from Munk 2009
+                eta = z_cr / s_cr
+                xi = z_up / s_up
+                c12 = -c21
+                c30 = -c03
+                Pdist_ = np.exp(-(xi ** 2 + eta ** 2) / 2) / (2. * np.pi) * \
+                         (1. +
+                          c12 * xi * (1 - eta ** 2) / 2 -
+                          c30 * xi * (3 - xi ** 2) / 6. +
+                          c40 * (3 - 6 * xi ** 2 + xi ** 4) / 24. +
+                          c22 * (1 - xi ** 2) * (1 - eta ** 2) / 4. +
+                          c04 * (3 - 6. * eta ** 2 + eta ** 4) / 24.)
 
         # ---------------------------------------------------------------------*
         #                    Rotation in the reference plane
@@ -109,14 +130,14 @@ class sunglint:
             cos_sigma2 = (muv + mu0 * np.cos(scat)) / (sin0 * np.sin(scat))
 
             # debug epsilon error in calcumation
-            if cos_sigma1> 1:
-                cos_sigma1=1
-            elif cos_sigma1<-1:
-                cos_sigma1=-1
-            if cos_sigma2> 1:
-                cos_sigma2=1
-            elif cos_sigma2<-1:
-                cos_sigma2=-1
+            if cos_sigma1 > 1:
+                cos_sigma1 = 1
+            elif cos_sigma1 < -1:
+                cos_sigma1 = -1
+            if cos_sigma2 > 1:
+                cos_sigma2 = 1
+            elif cos_sigma2 < -1:
+                cos_sigma2 = -1
 
             sigma1 = np.arccos(cos_sigma1)
             sigma2 = np.arccos(cos_sigma2)
@@ -159,10 +180,13 @@ class sunglint:
         Qglint = Rf[1, 0] * Pdist
         Uglint = Rf[2, 0] * Pdist
 
-        if Iglint <= 0:
-            print(Pdist_,np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up) )
+        # if Iglint < 0:
+        #    print(vza*180/np.pi,azi*180/np.pi,Pdist_, np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up))
 
-        return [Iglint,Qglint,Uglint] #,Rf
+        if slope:
+            return [z_up, z_cr, Rf[0, 0]]
+        else:
+            return [Iglint, Qglint, Uglint]  # ,Rf
 
     def atmo_trans(self, tau, sza, Iglint):
         # ---------------------------------------------------------------------*

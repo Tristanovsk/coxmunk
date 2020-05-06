@@ -3,6 +3,7 @@
 Simple sunglint computation based on [Cox & Munk](https://www.osapublishing.org/josa/abstract.cfm?uri=josa-44-11-838) model.
 For more details on the statistics of the wave slopes (i.e., *Probability Distribution Function*), please refer to [Munk 2009](https://www.annualreviews.org/doi/abs/10.1146/annurev.marine.010908.163940).
 
+![image_output](illustration/sunglint_examples_sza3_optimized.gif)
 
 ## Getting Started
 

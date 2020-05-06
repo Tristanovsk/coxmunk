@@ -1,7 +1,7 @@
 ''' Simple sunglint computation for differentr wave slope statistics based on Cox-Munk model
 
 Usage:
-  coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>] [--shadow] [--figname <figname>]
+  coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>] [--shadow] [--slope] [--figname <figname>]
   coxmunk -h | --help
   coxmunk -v | --version
 
@@ -18,6 +18,7 @@ Options:
                     [default: cm_iso]
   --wind_azi wind_azi  Azimuth of wind direction from the Principal plane
                         [default: 0]
+  --slope    If set, output figure of wave slope values
   --shadow   If set, computation of the hiding and shadowing effects of wave heights
   --figname figname   Path to save figure (ex: ./illustration/coxmunk_fig_39_14.2_bh2006_75.png)
 
@@ -45,7 +46,7 @@ class plot():
             font = {'family': 'serif',
                     'color': 'black',
                     'weight': 'normal',
-                    'size': 16,
+                    'size': 18,
                     }
         self.font = font
 
@@ -57,7 +58,8 @@ class plot():
         ax.set_theta_direction(1)
         return
 
-    def add_polplot(self, ax, r, theta, values, title="", scale=True, nlayers=50, cmap=cm.cm.delta, colfmt='%0.1e',
+    def add_polplot(self, ax, r, theta, values, title="", scale=True, nlayers=50, cmap=cm.cm.delta, cmap_sym=False,
+                    colfmt='%0.1e',
                     pad=0.1, fraction=0.034, **kwargs):
 
         theta = np.radians(theta)
@@ -72,6 +74,12 @@ class plot():
         if 'vmax' in kwargs:
             max_ = kwargs['vmax']
 
+        if cmap_sym:
+            val = max(abs(min_), max_)
+            min_ = -val
+            max_ = val
+
+        # debug
         if max_ - min_ == 0:
             max_ = min_ + 1
         inc = (max_ - min_) / nlayers
@@ -94,39 +102,51 @@ def main():
     wind_azi = float(args['--wind_azi'])
     stats = args['--stats']
     shadow = args['--shadow']
+    slope = args['--slope']
     figname = args['--figname']
 
-    vza = np.linspace(0, 80, 81)
+    vza = np.linspace(0, 80, 41)
     azi = np.linspace(0, 360, 181)
     Nvza, Nazi = len(vza), len(azi)
 
     data = np.zeros((Nazi, Nvza, 3))
+
     for i in range(Nvza):
         for j in range(Nazi):
-            data[j, i, :] = coxmunk.sunglint(
-                sza, vza[i], azi[j], m=1.334).sunglint(
-                wind, wind_azi, stats=stats, shadow=shadow)
+            data[j, i, :] = coxmunk.sunglint(sza,vza[i],azi[j], m=1.334).sunglint(
+                wind, wind_azi, stats=stats, shadow=shadow, slope=slope)
 
     # ------------------
     # plotting section
     # ------------------
+
+    if slope:
+        titles = ('$Z_{up}$', '$Z_{cr}$', '$R_f$')
+    else:
+        titles = ('I', 'Q', 'U')
+
     fig, axs = plt.subplots(nrows=2, ncols=2, subplot_kw=dict(projection='polar'), figsize=(15, 13))
     axs = axs.ravel()
     axs[0].scatter([0], [sza], marker='*', facecolor='orange', alpha=0.6, s=1000)
     plot().label_polplot(axs[0], yticks=[20., 40., 60., 80.],
                          ylabels=['$20^{\circ}$', '$40^{\circ}$', '$60^{\circ}$', ''])
+    l_arrow = np.max(vza) * max(3, min(16, wind)) / 15
 
-    axs[0].arrow(wind_azi * np.pi / 180, 0, 0, np.max(vza) * max(3,min(16,wind)) / 22, alpha=0.5, width=0.05, head_width=0.25,
-                 head_length=15,
+    axs[0].arrow(wind_azi * np.pi / 180, 0, 0, l_arrow, alpha=0.5, width=0.05, head_width=0.25,
+                 head_length=l_arrow / 4,
                  edgecolor='black', facecolor='green', lw=1.2)
+
     axs[0].set_title('Sun and wind directions', pad=30)
 
-    for i, title in enumerate(('I', 'Q', 'U')):
+    cmap_sym = True
+    for i, title in enumerate(titles):
+        cmap = cm.tools.crop_by_percent(cm.cm.balance, 20, which='both', N=None)
         if title == 'I':
-            cmap = plt.cm.gist_stern_r
-        else:
-            cmap = cm.tools.crop_by_percent(cm.cm.balance, 20, which='both', N=None)
-        plot().add_polplot(axs[i + 1], vza, azi, data[..., i].T, title=title, cmap=cmap)
+            cmap = plt.cm.Spectral_r  #gist_stern_r
+        if title in ('$R_f$', 'Q', 'I'):
+            cmap_sym = False
+
+        plot().add_polplot(axs[i + 1], vza, azi, data[..., i].T, title=title, cmap=cmap, cmap_sym=cmap_sym)
     # I=data[...,0].T
     # Q=data[...,1].T
     # U=data[...,2].T
@@ -136,7 +156,7 @@ def main():
     plt.tight_layout(rect=[0.0, 0.0, 0.99, 0.95])
 
     if figname:
-        plt.savefig(figname, dpi=300)
+        plt.savefig(figname, dpi=200)
     else:
         plt.show()
 
