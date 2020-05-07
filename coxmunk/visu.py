@@ -108,8 +108,13 @@ def main():
     vza = np.linspace(0, 80, 41)
     azi = np.linspace(0, 360, 181)
     Nvza, Nazi = len(vza), len(azi)
-
-    data = np.zeros((Nazi, Nvza, 3))
+    if slope:
+        titles = ('$Z_{up}$', '$Z_{cr}$', '$R_f$','Pdist')
+        N = 4
+    else:
+        titles = ('I', 'Q', 'U')
+        N=3
+    data = np.zeros((Nazi, Nvza, N))
 
     for i in range(Nvza):
         for j in range(Nazi):
@@ -120,13 +125,36 @@ def main():
     # plotting section
     # ------------------
 
-    if slope:
-        titles = ('$Z_{up}$', '$Z_{cr}$', '$R_f$')
-    else:
-        titles = ('I', 'Q', 'U')
 
     fig, axs = plt.subplots(nrows=2, ncols=2, subplot_kw=dict(projection='polar'), figsize=(15, 13))
     axs = axs.ravel()
+
+    cmap_sym = True
+
+    if slope:
+        for i, title in enumerate(titles):
+            cmap = cm.tools.crop_by_percent(cm.cm.balance, 20, which='both', N=None)
+            if title in ('Pdist','$R_f$', 'Q', 'I'):
+                cmap_sym = False
+
+            plot().add_polplot(axs[i], vza, azi, data[..., i].T, title=title, cmap=cmap, cmap_sym=cmap_sym)
+    else:
+        axs[0].set_title('Sun and wind directions', pad=30)
+
+
+        for i, title in enumerate(titles):
+            cmap = cm.tools.crop_by_percent(cm.cm.balance, 20, which='both', N=None)
+            if title == 'I':
+                cmap = plt.cm.Spectral_r  #gist_stern_r
+            if title in ('Pdist','$R_f$', 'Q', 'I'):
+                cmap_sym = False
+
+            plot().add_polplot(axs[i + 1], vza, azi, data[..., i].T, title=title, cmap=cmap, cmap_sym=cmap_sym)
+        # I=data[...,0].T
+    # Q=data[...,1].T
+    # U=data[...,2].T
+    # DOP = np.sqrt(Q**2+U**2)#/I
+    # plot().add_polplot(axs[3], vza, azi, DOP, title='DOP', cmap=cmap)
     axs[0].scatter([0], [sza], marker='*', facecolor='orange', alpha=0.6, s=1000)
     plot().label_polplot(axs[0], yticks=[20., 40., 60., 80.],
                          ylabels=['$20^{\circ}$', '$40^{\circ}$', '$60^{\circ}$', ''])
@@ -135,23 +163,6 @@ def main():
     axs[0].arrow(wind_azi * np.pi / 180, 0, 0, l_arrow, alpha=0.5, width=0.05, head_width=0.25,
                  head_length=l_arrow / 4,
                  edgecolor='black', facecolor='green', lw=1.2)
-
-    axs[0].set_title('Sun and wind directions', pad=30)
-
-    cmap_sym = True
-    for i, title in enumerate(titles):
-        cmap = cm.tools.crop_by_percent(cm.cm.balance, 20, which='both', N=None)
-        if title == 'I':
-            cmap = plt.cm.Spectral_r  #gist_stern_r
-        if title in ('$R_f$', 'Q', 'I'):
-            cmap_sym = False
-
-        plot().add_polplot(axs[i + 1], vza, azi, data[..., i].T, title=title, cmap=cmap, cmap_sym=cmap_sym)
-    # I=data[...,0].T
-    # Q=data[...,1].T
-    # U=data[...,2].T
-    # DOP = np.sqrt(Q**2+U**2)#/I
-    # plot().add_polplot(axs[3], vza, azi, DOP, title='DOP', cmap=cmap)
     plt.suptitle(r'Wind speed: {:.1f} m/s; direction: {:.1f} deg.'.format(wind, wind_azi))
     plt.tight_layout(rect=[0.0, 0.0, 0.99, 0.95])
 
