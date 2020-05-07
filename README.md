@@ -78,3 +78,14 @@ $ coxmunk 39 14.2 --stats bh2006 --wind_azi 75
 ```
 
 ![image_output](illustration/coxmunk_fig_39_14.2_bh2006_75.png)
+
+With the option `--slope` you can also check
+ the values of wave slopes upwind and crosswind,
+ the first term of the Fresnel matrix and the probability distribution function:
+
+```
+$ coxmunk 20 5 --stats bh2006 --wind_azi 60 --slope
+```
+
+![image_output](illustration/coxmunk_fig_sza20_ws5_wazi60_bh2006--slope.png)
+

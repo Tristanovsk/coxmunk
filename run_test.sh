@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 odir=./test
-winds="0.5 3 8 15" # 7.2 14.2"
+winds="0.5" #0.5 3 8 15" # 7.2 14.2"
 wazis=$(seq 0 30 359)
-szas=3 #$(seq 0 20 60)
+szas=20 #$(seq 0 20 60)
 slope="" #--slope
 
 for wind in $winds; do
