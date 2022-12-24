@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
 odir=./test
-winds="0.5" #0.5 3 8 15" # 7.2 14.2"
-wazis=$(seq 0 30 359)
-szas=20 #$(seq 0 20 60)
-slope="" #--slope
+winds="0.5 2 6 12" #0.5 3 8 15" # 7.2 14.2"
+wazis=$(seq 0 90 359)
+szas=80 #$(seq 0 20 60)
+slope=--slope
+slope=""
 
 for wind in $winds; do
  for wazi in $wazis;do

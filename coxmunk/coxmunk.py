@@ -76,13 +76,18 @@ class sunglint:
             c40 = 0.30
             c22 = 0.12
             c04 = 0.4
+
+        zx = -1 * (sinv * muazi + sin0) / (mu0 + muv)
+        zy = -1 * (sinv * sinazi) / (mu0 + muv)
+
         if stats == 'cm_iso':
-            Pdist_ = 1. / (np.pi * sigma2) * np.exp(-1. * np.tan(thetaN) ** 2 / sigma2)
+            #TODO check consitency between sigma2 and formulation
+            #Pdist_ = 1. / (np.pi *2.* sigma2) * np.exp(-1./2 * np.tan(thetaN) ** 2 / sigma2)
+            Pdist_ = 1. / (np.pi * sigma2) * np.exp(- np.tan(thetaN) ** 2 / sigma2)
+
+            z_up,z_cr=zx,zy
         else:
             sigma2 = s_cr2 + s_up2
-
-            zx = -1 * (sinv * muazi + sin0) / (mu0 + muv)
-            zy = -1 * (sinv * sinazi) / (mu0 + muv)
 
             # TODO check why it is clockwise rotation
             z_up = np.cos(wazi) * zx + np.sin(wazi) * zy
@@ -107,7 +112,7 @@ class sunglint:
                 xi = z_up / s_up
                 c12 = -c21
                 c30 = -c03
-                Pdist_ = np.exp(-(xi ** 2 + eta ** 2) / 2) / (2. * np.pi) * \
+                Pdist_ = np.exp(-(xi ** 2 + eta ** 2) / 2) / (2. * np.pi* s_cr * s_up) * \
                          (1. +
                           c12 * xi * (1 - eta ** 2) / 2 -
                           c30 * xi * (3 - xi ** 2) / 6. +
@@ -179,14 +184,14 @@ class sunglint:
         Iglint = Rf[0, 0] * Pdist
         Qglint = Rf[1, 0] * Pdist
         Uglint = Rf[2, 0] * Pdist
-
+        Vglint = Rf[3, 0] * Pdist
         # if Iglint < 0:
         #    print(vza*180/np.pi,azi*180/np.pi,Pdist_, np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up))
 
         if slope:
             return [z_up, z_cr, Rf[0, 0],Pdist_]
         else:
-            return [Iglint, Qglint, Uglint]  # ,Rf
+            return [Iglint, Qglint, Uglint,Vglint]  # ,Rf
 
     def atmo_trans(self, tau, sza, Iglint):
         # ---------------------------------------------------------------------*
