@@ -19,7 +19,7 @@ vza = np.linspace(0,80,81)
 azi = np.linspace(0,360,181)
 Nvza,Nazi =len(vza),len(azi)
 
-data=np.zeros((Nazi,Nvza,3))
+data=np.zeros((Nazi,Nvza,4))
 for i in range(Nvza):
     for j in range(Nazi):
         data[j,i,:]=coxmunk.sunglint(
@@ -40,7 +40,7 @@ for i,title in  enumerate(('I','Q','U')):
         cmap = plt.cm.gist_stern_r
     else:
         cmap = cm.tools.crop_by_percent(cm.cm.balance, 20, which='both', N=None)
-    uplot().add_polplot(axs[i+1], vza, azi, data[...,i].T, title=title, cmap=cmap)
+    uplot().add_polplot(axs[i+1], vza, azi, data[...,i+1].T, title=title, cmap=cmap)
 # I=data[...,0].T
 # Q=data[...,1].T
 # U=data[...,2].T

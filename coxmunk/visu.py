@@ -113,7 +113,7 @@ def main():
         N = 4
     else:
         titles = ('I', 'Q', 'U')
-        N=3
+        N=4
     data = np.zeros((Nazi, Nvza, N))
 
     for i in range(Nvza):
