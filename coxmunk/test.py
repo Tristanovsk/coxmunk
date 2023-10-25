@@ -13,9 +13,15 @@ slope=None
 shadow=False
 stats='cm_dir'
 #stats='cm_iso'
+title=""
+if stats=='cm_dir':
+    title = 'Cox-Munk anisotropic'
+elif stats=='cm_iso':
+    title = 'Cox-Munk isotropic'
+
 #data = np.zeros((Nazi, Nvza, N))
 azi=180
-vzas = np.linspace(0, 80, 41)
+vzas = np.linspace(0, 80, 81)
 azis = np.array([0,45,90,135,180])
 winds = np.array([0.5,2,6,10,14])
 wind_azi=0
@@ -39,3 +45,5 @@ xarr = df.to_xarray()
 xarr_ =xarr.sel(azi=180).squeeze()
 
 xarr_.I.plot(hue='wind',col='sza',col_wrap=4,sharey=False)
+plt.suptitle(title)
+plt.savefig('test/transect/'+title+'azi{:.1f}'.format(azi)+'.png',dpi=300)

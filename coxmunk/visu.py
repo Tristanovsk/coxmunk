@@ -1,4 +1,4 @@
-''' Simple sunglint computation for differentr wave slope statistics based on Cox-Munk model
+''' Simple sunglint computation for different wave slope statistics based on Cox-Munk model
 
 Usage:
   coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>] [--shadow] [--slope] [--figname <figname>]
@@ -66,7 +66,7 @@ class plot():
         self.label_polplot(ax)
         ax.set_title(title, fontdict=self.font, pad=30)
 
-        min_, max_ = values.min(), values.max()
+        min_, max_ = np.nanmin(values), np.nanmax(values)
         if np.abs(min_) < 1e-6:
             min_ = 0
         if 'vmin' in kwargs:
