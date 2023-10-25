@@ -1,6 +1,7 @@
 
 from setuptools import setup, find_packages
-from coxmunk import __version__, __package__
+__version__='1.0.1'
+__package__='coxmunk'
 
 setup(
     name=__package__,
@@ -21,7 +22,7 @@ setup(
     description='simple sunglint computation based on Cox-Munk wave slope distribution',
 
     # Dependent packages (distributions)
-    install_requires=['pandas','numpy','netCDF4',
+    install_requires=['pandas','numpy','netCDF4','xarray',
                       'matplotlib','docopt'],
 
     entry_points={
