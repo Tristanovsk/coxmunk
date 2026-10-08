@@ -220,9 +220,9 @@ In 1822, Spooner named *Kumatage* (from the Greek κυμάτων, *of the waves*
 equations. Navigators filtered it out as a glare, painters made it a subject, Cox & Munk turned it
 into a measurement of the sea surface slopes, ocean color remote sensing removed it as a noise, and
 it is now exploited as a signal on winds, waves, currents and slicks. The
-[Kumatage chapter](https://coxmunk.readthedocs.io/en/latest/kumatage.html) of the documentation
-retraces this history (adapted from Harmel, Bary, Gernez & Morin, OCEANEXT 2019), with paintings
-and Sentinel-2 images.
+[History section](https://coxmunk.readthedocs.io/en/latest/history/kumatage.html) of the documentation
+retraces this history (adapted from Harmel, Bary, Gernez & Morin, OCEANEXT 2019), with paintings,
+Cox & Munk and Sentinel-2 images.
 
 ## Examples
 
