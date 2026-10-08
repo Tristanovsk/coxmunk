@@ -11,10 +11,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Python >= 3.8 and a recent `pip`:
 
 ```
-python3 -m pip install --user --upgrade setuptools
+python3 -m pip install --upgrade pip
 ```
 
 ### Installing
@@ -23,24 +23,23 @@ First, clone [the repository](https://github.com/Tristanovsk/coxmunk#) and execu
 local copy:
 
 ```
-python3 setup.py install 
+python3 -m pip install .
 ```
 
-This will install the package into the system's Python path.
-If you have not the administrator rights, you can install the package as follows:
+For development (editable install, code changes are picked up without reinstalling):
 
 ```
-python3 setup.py install --user
+python3 -m pip install -e .
 ```
 
-If another destination directory is preferred, it can be set by
+If you do not have administrator rights, add `--user` (or, preferably, use a virtual environment):
 
 ```
-python3 setup.py install --prefix=<where-to-install>
+python3 -m pip install --user .
 ```
 
 This installation is supposed to download
-and compile all the associated packages as well as prepare the executables `coxmunk`.
+all the associated packages as well as prepare the executables `coxmunk`.
 
 If the installation is successful, you should have:
 ```
