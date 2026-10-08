@@ -1,5 +1,8 @@
-pandas
 numpy
+scipy
+pandas
+xarray
 netCDF4
 matplotlib
+cmocean
 docopt
