@@ -29,7 +29,7 @@ for i in range(Nvza):
 fig, axs = plt.subplots(nrows=2,ncols=2, subplot_kw=dict(projection='polar'),figsize=(15, 13))
 axs=axs.ravel()
 axs[0].scatter([0],[sza],marker='*',facecolor ='orange',alpha=0.6,s=1000)
-uplot().label_polplot(axs[0],yticks=[20., 40., 60.,80.], ylabels=['$20^{\circ}$', '$40^{\circ}$', '$60^{\circ}$',''])
+uplot().label_polplot(axs[0],yticks=[20., 40., 60.,80.], ylabels=[r'$20^{\circ}$', r'$40^{\circ}$', r'$60^{\circ}$',''])
 
 axs[0].arrow(wind_azi*np.pi/180, 0, 0,np.max(vza)*max(3,min(16,wind))/22, alpha = 0.5, width = 0.05,head_width=0.25,head_length=15,
                  edgecolor = 'black', facecolor = 'green', lw = 1.2)

@@ -50,7 +50,7 @@ class plot():
                     }
         self.font = font
 
-    def label_polplot(self, ax, yticks=[20., 40., 60.], ylabels=['$20^{\circ}$', '$40^{\circ}$', '$60^{\circ}$']):
+    def label_polplot(self, ax, yticks=[20., 40., 60.], ylabels=[r'$20^{\circ}$', r'$40^{\circ}$', r'$60^{\circ}$']):
 
         ax.set_yticks(yticks)
         ax.set_yticklabels(ylabels)
@@ -157,7 +157,7 @@ def main():
     # plot().add_polplot(axs[3], vza, azi, DOP, title='DOP', cmap=cmap)
     axs[0].scatter([0], [sza], marker='*', facecolor='orange', alpha=0.6, s=1000)
     plot().label_polplot(axs[0], yticks=[20., 40., 60., 80.],
-                         ylabels=['$20^{\circ}$', '$40^{\circ}$', '$60^{\circ}$', ''])
+                         ylabels=[r'$20^{\circ}$', r'$40^{\circ}$', r'$60^{\circ}$', ''])
     l_arrow = np.max(vza) * max(3, min(16, wind)) / 15
 
     axs[0].arrow(wind_azi * np.pi / 180, 0, 0, l_arrow, alpha=0.5, width=0.05, head_width=0.25,
