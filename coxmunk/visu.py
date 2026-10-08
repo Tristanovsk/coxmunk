@@ -36,6 +36,16 @@ import coxmunk.coxmunk as coxmunk
 
 
 class plot():
+    '''
+    Polar plots of sunglint quantities as a function of viewing geometry.
+
+    Parameters
+    ----------
+    font : dict, optional
+        Matplotlib font properties used for the titles
+        (default: serif, black, size 18).
+    '''
+
     def __init__(self, font=None):
         # ----------------------------
         # set plotting styles
@@ -51,6 +61,19 @@ class plot():
         self.font = font
 
     def label_polplot(self, ax, yticks=[20., 40., 60.], ylabels=[r'$20^{\circ}$', r'$40^{\circ}$', r'$60^{\circ}$']):
+        '''
+        Format a polar axis: zenith-angle ticks along the radius and azimuth 0
+        pointing down (Sun side).
+
+        Parameters
+        ----------
+        ax : matplotlib.projections.polar.PolarAxes
+            Axis to format.
+        yticks : list of float, optional
+            Radial tick positions (viewing zenith angle, deg).
+        ylabels : list of str, optional
+            Radial tick labels.
+        '''
 
         ax.set_yticks(yticks)
         ax.set_yticklabels(ylabels)
@@ -61,6 +84,41 @@ class plot():
     def add_polplot(self, ax, r, theta, values, title="", scale=True, nlayers=50, cmap=cm.cm.delta, cmap_sym=False,
                     colfmt='%0.1e',
                     pad=0.1, fraction=0.034, **kwargs):
+        '''
+        Draw filled contours of ``values`` on a polar axis.
+
+        Parameters
+        ----------
+        ax : matplotlib.projections.polar.PolarAxes
+            Axis to draw on.
+        r : array_like
+            Radial coordinates (viewing zenith angle, deg).
+        theta : array_like
+            Angular coordinates (relative azimuth, deg).
+        values : array_like
+            Values to plot, shape ``(len(theta), len(r))``.
+        title : str, optional
+            Axis title.
+        scale : bool, optional
+            If True, add a colorbar.
+        nlayers : int, optional
+            Number of contour levels.
+        cmap : matplotlib.colors.Colormap, optional
+            Colormap (default ``cmocean.cm.delta``).
+        cmap_sym : bool, optional
+            If True, use color limits symmetric around zero.
+        colfmt : str, optional
+            Colorbar tick format.
+        pad, fraction : float, optional
+            Colorbar placement, passed to :func:`matplotlib.pyplot.colorbar`.
+        **kwargs
+            ``vmin``/``vmax`` set the color limits; all keywords are passed to
+            :meth:`~matplotlib.axes.Axes.contourf`.
+
+        Returns
+        -------
+        matplotlib.contour.QuadContourSet
+        '''
 
         theta = np.radians(theta)
         self.label_polplot(ax)
@@ -92,6 +150,7 @@ class plot():
 
 
 def main():
+    '''Entry point of the ``coxmunk`` command line (see the module usage).'''
     from coxmunk.__init__ import __package__, __version__
 
     args = docopt(__doc__, version=__package__ + ' ' + __version__)

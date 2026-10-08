@@ -23,6 +23,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/Tristanovsk/coxmunk"
+Documentation = "https://coxmunk.readthedocs.io"
 
 [project.scripts]
 coxmunk = "coxmunk.visu:main"
