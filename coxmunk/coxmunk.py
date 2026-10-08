@@ -165,9 +165,10 @@ class sunglint:
             Rf = np.matmul(L2, Rf)
 
         if shadow and vza != 0:
-            Ls = self.Lambda(s_up2, s_cr2, 1, sza)
-            Lr = self.Lambda(s_up2, s_cr2, muazi ** 2, vza)
-            # print(s_up2, s_cr2, muazi ** 2, vza, Ls, Lr)
+            # azimuths of the Sun (0) and viewing (azi) directions relative to the upwind axis,
+            # consistent with the rotation used for z_up and z_cr
+            Ls = self.Lambda(s_up2, s_cr2, np.cos(wazi) ** 2, sza)
+            Lr = self.Lambda(s_up2, s_cr2, np.cos(azi - wazi) ** 2, vza)
             SH = 1 / (1 + Ls + Lr)
         else:
             SH = 1.
@@ -267,6 +268,9 @@ class sunglint:
         :param theta: zenith angle (rad)
         :return: Lambda
         '''
+        # no shadowing at nadir/zenith (nu -> infinity, Lambda -> 0)
+        if np.tan(theta) == 0:
+            return 0.
         piroot = np.sqrt(np.pi)
         nu = self.nu(sigx2, sigy2, cosphi2, theta)
         return (np.exp(-nu ** 2) - nu * piroot * special.erfc(nu)) / (2 * nu * piroot)
