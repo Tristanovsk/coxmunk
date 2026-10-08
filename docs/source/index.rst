@@ -11,7 +11,14 @@ coxmunk documentation
    algorithms
    polarization
    wind_speed
-   kumatage
+
+.. toctree::
+   :maxdepth: 2
+   :caption: History
+
+   history/kumatage
+   history/cox_munk
+   history/satellite_era
 
 
 .. toctree::
