@@ -188,7 +188,10 @@ class sunglint:
         # if Iglint < 0:
         #    print(vza*180/np.pi,azi*180/np.pi,Pdist_, np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up))
 
-        if slope:
+
+        if slope == "check":
+            return [Rf[0, 0],Rf[1, 0],Rf[2, 0],Rf[3, 0], Pdist_,np.cos(thetaN),SH]
+        elif slope:
             return [z_up, z_cr, Rf[0, 0],Pdist_]
         else:
             return [Iglint, Qglint, Uglint,Vglint]  # ,Rf
