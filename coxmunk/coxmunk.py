@@ -75,22 +75,149 @@ class sunglint:
         Refractive index of water (default 1.334).
     tau_atm : float, optional
         Atmospheric optical thickness. Not used yet: transmittances are set to 1.
+    tilt : float, optional
+        Slope :math:`\beta` (deg) of the reference plane on which the wave
+        facets are distributed (default 0: horizontal sea surface).
+    tilt_azi : float, optional
+        Azimuth :math:`\phi_p` (deg) toward which the normal of the reference
+        plane leans (the downslope direction), counted from the Sun azimuth with
+        the same convention as ``azi`` (``tilt_azi=0``: plane facing the Sun).
+    pol_ref : {'global', 'local'}, optional
+        Reference plane of the output Stokes vector for a tilted surface: the
+        meridian plane containing the vertical (``'global'``, default) or the
+        normal of the tilted plane (``'local'``).
+
+    Notes
+    -----
+    ``sza``, ``vza`` and ``azi`` are always given in the horizontal frame. With
+    a tilted plane, they are converted into angles relative to the plane (see
+    :meth:`local_geometry`) and all the computations of :meth:`sunglint` are done
+    with these local angles, stored in ``sza``, ``vza`` and ``azi`` (rad); the
+    horizontal ones are kept in ``sza_h``, ``vza_h`` and ``azi_h``. The glint is
+    then a reflectance relative to the irradiance received by the tilted plane;
+    multiply by :math:`\cos\theta_s'/\cos\theta_s` to normalize it by the
+    irradiance on a horizontal surface. When the Sun or the sensor is below the
+    tilted plane (``visible`` is False), the glint is zero.
 
     Examples
     --------
     >>> from coxmunk import sunglint
     >>> I, Q, U, V = sunglint(sza=30, vza=30, azi=180).sunglint(ws=5, stats='bh2006')
+
+    Same geometry over a plane sloping by 10° toward the Sun:
+
+    >>> I, Q, U, V = sunglint(30, 30, 180, tilt=10, tilt_azi=0).sunglint(ws=5, stats='bh2006')
     '''
 
-    def __init__(self, sza, vza, azi, m=1.334, tau_atm=0):
+    def __init__(self, sza, vza, azi, m=1.334, tau_atm=0, tilt=0, tilt_azi=0, pol_ref='global'):
         degrad = np.pi / 180.
-        self.sza = sza * degrad
-        self.mu0 = np.cos(self.sza)
-        self.sin0 = np.sin(self.sza)
-        self.vza = vza * degrad
-        self.azi = azi * degrad
         self.m = m
         self.tau_atm = tau_atm
+        self.pol_ref = pol_ref
+
+        # geometry given in the horizontal (global) frame
+        self.sza_h = sza * degrad
+        self.vza_h = vza * degrad
+        self.azi_h = azi * degrad
+        self.tilt = tilt * degrad
+        self.tilt_azi = tilt_azi * degrad
+
+        # angles relative to the mean (reference) plane of the sea surface
+        sza_l, vza_l, azi_l, self.psi = self.local_geometry(
+            self.sza_h, self.vza_h, self.azi_h, self.tilt, self.tilt_azi)
+        self.sza = sza_l
+        self.mu0 = np.cos(self.sza)
+        self.sin0 = np.sin(self.sza)
+        self.vza = vza_l
+        self.azi = azi_l
+        # Sun and sensor must both be above the reference plane
+        self.visible = (sza_l < np.pi / 2) and (vza_l < np.pi / 2)
+
+    @staticmethod
+    def local_geometry(sza, vza, azi, tilt, tilt_azi):
+        r'''
+        Sun and viewing angles relative to a tilted reference plane.
+
+        The directions toward the Sun and toward the sensor are, in the
+        horizontal frame (Sun azimuth 0),
+
+        .. math::
+
+            \mathbf{s} = (\sin\theta_s, 0, \cos\theta_s), \qquad
+            \mathbf{v} = (\sin\theta_v\cos\phi, \sin\theta_v\sin\phi, \cos\theta_v)
+
+        The reference plane has the slope :math:`\beta` and its normal points
+        toward the azimuth :math:`\phi_p` (the downslope direction, counted from
+        the Sun azimuth with the same convention as :math:`\phi`):
+
+        .. math::
+
+            \mathbf{n}_p = (\sin\beta\cos\phi_p, \sin\beta\sin\phi_p, \cos\beta)
+
+        The local frame is obtained by rotating the horizontal frame by
+        :math:`\beta` around the horizontal axis perpendicular to
+        :math:`\phi_p`, :math:`\mathbf{M} = R_z(\phi_p) R_y(\beta) R_z(-\phi_p)`,
+        and the local coordinates are :math:`\mathbf{M}^T\mathbf{s}` and
+        :math:`\mathbf{M}^T\mathbf{v}`. The local zenith angles are
+        :math:`\cos\theta_s' = \mathbf{s}\cdot\mathbf{n}_p` and
+        :math:`\cos\theta_v' = \mathbf{v}\cdot\mathbf{n}_p`, and the local
+        relative azimuth is :math:`\phi' = \phi_v' - \phi_s'`.
+
+        The angle :math:`\psi` rotates the Stokes vector from the local
+        meridian plane of the viewing direction (containing :math:`\mathbf{n}_p`
+        and :math:`\mathbf{v}`) to the horizontal one (containing the vertical
+        and :math:`\mathbf{v}`), this plane being the reference of the Stokes
+        vector returned by :meth:`sunglint`.
+
+        Parameters
+        ----------
+        sza, vza, azi : float
+            Solar zenith, viewing zenith and relative azimuth angles in the
+            horizontal frame (rad).
+        tilt : float
+            Slope :math:`\beta` of the reference plane (rad).
+        tilt_azi : float
+            Azimuth :math:`\phi_p` of the plane normal (rad).
+
+        Returns
+        -------
+        tuple
+            ``(sza', vza', azi', psi)`` in rad; ``azi'`` is in :math:`[0, 2\pi)`.
+        '''
+        if tilt == 0:
+            return sza, vza, azi, 0.
+
+        s = np.array([np.sin(sza), 0., np.cos(sza)])
+        v = np.array([np.sin(vza) * np.cos(azi), np.sin(vza) * np.sin(azi), np.cos(vza)])
+
+        def rot_z(a):
+            return np.array([[np.cos(a), -np.sin(a), 0.], [np.sin(a), np.cos(a), 0.], [0., 0., 1.]])
+
+        rot_y = np.array([[np.cos(tilt), 0., np.sin(tilt)], [0., 1., 0.], [-np.sin(tilt), 0., np.cos(tilt)]])
+        M = rot_z(tilt_azi) @ rot_y @ rot_z(-tilt_azi)
+        normal = M[:, 2]
+
+        s_l = M.T @ s
+        v_l = M.T @ v
+        sza_l = np.arccos(np.clip(s_l[2], -1, 1))
+        vza_l = np.arccos(np.clip(v_l[2], -1, 1))
+        azi_l = (np.arctan2(v_l[1], v_l[0]) - np.arctan2(s_l[1], s_l[0])) % (2 * np.pi)
+
+        # rotation between the local and horizontal meridian planes of the viewing direction,
+        # the plane to which the Stokes vector of sunglint() is referenced
+        def meridian(z):
+            t = z - np.dot(z, v) * v
+            norm = np.linalg.norm(t)
+            return t / norm if norm > 1e-12 else None
+
+        t_h = meridian(np.array([0., 0., 1.]))
+        t_l = meridian(normal)
+        if t_h is None or t_l is None:
+            psi = 0.
+        else:
+            psi = np.arctan2(np.dot(np.cross(t_l, t_h), -v), np.dot(t_l, t_h))
+
+        return sza_l, vza_l, azi_l, psi
 
     def sunglint(self, ws, wazi=0, stats='cm_dir', shadow=True, slope=False):
         r'''
@@ -190,9 +317,13 @@ class sunglint:
             0 & 0 & 0 & 1
             \end{pmatrix},
             \qquad
-            \cos\sigma_1 = \frac{-\mu_s - \mu_v\cos\Theta}{\sin\theta_v \sin\Theta},
+            \cos\sigma_1 = \frac{-\mu_v - \mu_s\cos\Theta}{\sin\theta_s \sin\Theta},
             \qquad
-            \cos\sigma_2 = \frac{\mu_v + \mu_s\cos\Theta}{\sin\theta_s \sin\Theta}
+            \cos\sigma_2 = \frac{\mu_s + \mu_v\cos\Theta}{\sin\theta_v \sin\Theta}
+
+        :math:`\sigma_1` is the angle at the Sun direction and :math:`\sigma_2`
+        the angle at the viewing direction, so that the reflected Stokes vector
+        is referenced to the meridian plane of the sensor.
 
         The signs of :math:`\sigma_1` and :math:`\sigma_2` are reversed when
         :math:`\sin\phi > 0`. No rotation is applied when :math:`\theta_v`,
@@ -224,6 +355,8 @@ class sunglint:
         wazi : float, optional
             Downwind direction :math:`\phi_w` (deg) counted counterclockwise from
             the Sun direction (e.g., ``wazi=0`` means the wind blows toward the Sun).
+            For a tilted plane, it is counted in the plane from the local Sun
+            azimuth (see :meth:`local_geometry`).
         stats : {'cm_iso', 'cm_dir', 'bh2006'}, optional
             Wave slope statistics:
 
@@ -248,6 +381,14 @@ class sunglint:
               the first column of the rotated Fresnel matrix, the slope
               probability density, the facet tilt cosine and the shadowing factor.
         '''
+        if not self.visible:
+            # Sun or sensor below the reference plane: no glint
+            if slope == "check":
+                return [np.nan] * 7
+            elif slope:
+                return [np.nan] * 4
+            return [0., 0., 0., 0.]
+
         sza = self.sza
         vza = self.vza
         azi = self.azi
@@ -344,8 +485,10 @@ class sunglint:
             L2[0, 0] = 1.
             L2[3, 3] = 1.
 
-            cos_sigma1 = (-mu0 - muv * np.cos(scat)) / (sinv * np.sin(scat))
-            cos_sigma2 = (muv + mu0 * np.cos(scat)) / (sin0 * np.sin(scat))
+            # sigma1: angle at the Sun direction (incident Stokes vector),
+            # sigma2: angle at the viewing direction (reflected Stokes vector)
+            cos_sigma1 = (-muv - mu0 * np.cos(scat)) / (sin0 * np.sin(scat))
+            cos_sigma2 = (mu0 + muv * np.cos(scat)) / (sinv * np.sin(scat))
 
             # debug epsilon error in calcumation
             if cos_sigma1 > 1:
@@ -399,6 +542,11 @@ class sunglint:
         Qglint = Rf[1, 0] * Pdist
         Uglint = Rf[2, 0] * Pdist
         Vglint = Rf[3, 0] * Pdist
+
+        if self.pol_ref == 'global' and self.psi != 0:
+            # Stokes vector from the local to the horizontal meridian plane
+            c2, s2 = np.cos(2 * self.psi), np.sin(2 * self.psi)
+            Qglint, Uglint = c2 * Qglint + s2 * Uglint, -s2 * Qglint + c2 * Uglint
         # if Iglint < 0:
         #    print(vza*180/np.pi,azi*180/np.pi,Pdist_, np.exp(-5e-1 * (xi ** 2 + eta ** 2)) / (2. * np.pi * s_cr * s_up))
 

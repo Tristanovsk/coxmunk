@@ -184,16 +184,17 @@ endif
 !*                    Rotation in the reference plane
 !*---------------------------------------------------------------------*
 
-cos_sigma1=(dcos(pi-SZA*degrad)-muv*dcos(theta_scat_in*degrad))/(sinv*dsin(theta_scat_in*degrad))
-cos_sigma2=(muv-dcos(pi-SZA*degrad)*dcos(theta_scat_in*degrad))/(dsin(pi-SZA*degrad)*dsin(theta_scat_in*degrad))
+! sigma1: angle at the Sun direction (incident Stokes vector)
+! sigma2: angle at the viewing direction (reflected Stokes vector, sensor meridian plane)
+cos_sigma1=(-muv+dcos(pi-SZA*degrad)*dcos(theta_scat_in*degrad))/(dsin(pi-SZA*degrad)*dsin(theta_scat_in*degrad))
+cos_sigma2=(-dcos(pi-SZA*degrad)+muv*dcos(theta_scat_in*degrad))/(sinv*dsin(theta_scat_in*degrad))
 
+! signs reversed when sin(AZI) > 0, as in the python version (coxmunk.py)
 sigma1=1d0*dacos(cos_sigma1)
-if(AZI>=0..and.AZI<180.)then
-   sigma2=1d0*dacos(cos_sigma2)
-!   sigma1=-1d0*dacos(cos_sigma1)
-else
-   sigma2=-1d0*dacos(cos_sigma2)
-   sigma1=-1d0*dacos(cos_sigma1)
+sigma2=1d0*dacos(cos_sigma2)
+if(AZI>0..and.AZI<180.)then
+   sigma2=-1d0*sigma2
+   sigma1=-1d0*sigma1
 endif !(AZI)
 
 
