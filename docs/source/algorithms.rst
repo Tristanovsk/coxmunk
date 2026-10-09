@@ -217,9 +217,12 @@ sensor. The Fresnel matrix is rotated accordingly,
    0 & 0 & 0 & 1
    \end{pmatrix},
    \quad
-   \cos\sigma_1 = \frac{-\mu_s - \mu_v\cos\Theta}{\sin\theta_v \sin\Theta},
+   \cos\sigma_1 = \frac{-\mu_v - \mu_s\cos\Theta}{\sin\theta_s \sin\Theta},
    \quad
-   \cos\sigma_2 = \frac{\mu_v + \mu_s\cos\Theta}{\sin\theta_s \sin\Theta}
+   \cos\sigma_2 = \frac{\mu_s + \mu_v\cos\Theta}{\sin\theta_v \sin\Theta}
+
+:math:`\sigma_1` is the angle at the Sun direction (incident Stokes vector) and
+:math:`\sigma_2` the angle at the viewing direction (reflected Stokes vector).
 
 The signs of :math:`\sigma_1` and :math:`\sigma_2` are reversed when
 :math:`\sin\phi > 0`. No rotation is applied when :math:`\theta_v`,
