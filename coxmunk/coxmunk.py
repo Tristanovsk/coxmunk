@@ -402,7 +402,7 @@ class sunglint:
         sinazi = np.sin(azi)
         scat = self.scat_angle()
         omega = (np.pi - scat) / 2  # for x in self.scat_angle()]
-        thetaN = np.arccos((mu0 + muv) / (2. * np.cos(omega)))
+        thetaN = np.arccos(np.clip((mu0 + muv) / (2. * np.cos(omega)), -1, 1))
 
         Rf = self.fresnel(omega)
 

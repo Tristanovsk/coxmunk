@@ -19,7 +19,7 @@ The authors
 
           Walter Munk at the Crafoord Prize press conference, Stockholm, 2010.
           Photo: Holger Motzkau, `Wikimedia Commons
-          <https://commons.wikimedia.org/wiki/File:Crafoordprize_2010-11_(cropped).jpg>`_,
+          <https://commons.wikimedia.org/wiki/File:Crafoordprize_2010-11_(cropped).jpg>`__,
           CC BY-SA 3.0.
      - **Walter H. Munk** (1917-2019) spent his career at Scripps, where he
        worked on wind waves and swell, ocean currents, tides and ocean
@@ -50,7 +50,7 @@ Sun toward the camera.
    A B-17G Flying Fortress, the type of aircraft used by Cox and Munk in 1951
    (here the Collings Foundation "Nine O Nine"). Photo: US Federal Government,
    public domain, `Wikimedia Commons
-   <https://commons.wikimedia.org/wiki/File:Collings_Foundation_B-17G_Flying_Fortress_%22Nine_O_Nine%22_in_Flight.jpg>`_.
+   <https://commons.wikimedia.org/wiki/File:Collings_Foundation_B-17G_Flying_Fortress_%22Nine_O_Nine%22_in_Flight.jpg>`__.
 
 From glitter to slope statistics
 --------------------------------

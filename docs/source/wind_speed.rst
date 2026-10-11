@@ -128,6 +128,15 @@ of the cloud-free pixels, with uncertainties generally below 1 m s\ :sup:`-1`.
   (78 044 pixels), the correlation coefficient was 0.84, the slope within 1 %
   and the RMSE 1.57 m s\ :sup:`-1`, in agreement with previous studies.
 
+.. figure:: ../../illustration/research/neukermans2018_fig12_parasol_wind_speed_2007.jpg
+   :width: 100%
+   :alt: Global annual mean sea surface wind speed for 2007 retrieved from PARASOL sunglint
+
+   Global wind speed field derived from the sunglint signal: annual average of
+   the sea surface wind speed for 2007, obtained from the inversion of the
+   sunglint signal measured by PARASOL in clear-sky conditions (data available
+   from ICARE/CNES). From [Neukermans2018]_ (Fig. 12, CC BY 4.0).
+
 Passive sensors measuring the polarization and the multidirectionality of the
 radiation at solar wavelengths are thus an alternative to estimate the surface
 wind at a resolution four to eight times finer than microwave sensors. The
@@ -139,3 +148,8 @@ References
 
 See [HarmelChami2012]_, [HarmelChami2013]_ and [Monahan1980]_ in
 :py:mod:`coxmunk.wind`, and [BreonHenriot2006]_ in :py:mod:`coxmunk.coxmunk`.
+
+.. [Neukermans2018] Neukermans, G., Harmel, T., Galí, M., et al. (2018).
+   Harnessing remote sensing to address critical science questions on
+   ocean-atmosphere interactions. *Elementa: Science of the Anthropocene*, 6, 71,
+   doi:`10.1525/elementa.331 <https://doi.org/10.1525/elementa.331>`_.
