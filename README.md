@@ -1,6 +1,22 @@
 # coxmunk
 
 Simple sunglint computation based on [Cox & Munk](https://www.osapublishing.org/josa/abstract.cfm?uri=josa-44-11-838) model.
+The sunglint, sunlight reflected by the waves, induces different patterns at different spatial
+(or temporal) scales, as in these examples:
+
+- (a) sea surface under gust wind conditions (reflex digital camera);
+- (b) aerial photograph of the sea surface with visible surfactant filaments;
+- (c\) Sentinel-2A image (4 July 2015) in the 2190-nm channel, where sunglint is the most intense
+  signal over water; the glint highlights eddies, ship wakes and wave packets;
+- (d) Sentinel-3 RGB image (10 May 2016) over the eastern Mediterranean Sea, with high sunglint on
+  the right side.
+
+![Sunglint patterns at different spatial scales](illustration/research/neukermans2018_fig11_sunglint_scales.jpg)
+
+Credits: Neukermans, Harmel, Galí et al. (2018). Harnessing remote sensing to address critical
+science questions on ocean-atmosphere interactions. *Elementa*, 6, 71,
+[doi:10.1525/elementa.331](https://doi.org/10.1525/elementa.331) (Fig. 11, CC BY 4.0).
+
 For more details on the statistics of the wave slopes (i.e., *Probability Distribution Function*), please refer to [Munk 2009](https://www.annualreviews.org/doi/abs/10.1146/annurev.marine.010908.163940).
 
 ![image_output](illustration/sunglint_examples_sza3_optimized.gif)

@@ -4,9 +4,11 @@ build:
   os: ubuntu-24.04
   tools:
     python: "3.12"
-  # ImageMagick converts the README GIF for the PDF/ePub builds (sphinx.ext.imgconverter)
+  # ImageMagick converts the README GIF for the PDF/ePub builds (sphinx.ext.imgconverter);
+  # graphviz draws the algorithm flowchart in the PDF/ePub (mermaid needs a browser)
   apt_packages:
     - imagemagick
+    - graphviz
 
 sphinx:
   configuration: docs/source/conf.py

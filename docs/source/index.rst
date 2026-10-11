@@ -27,6 +27,7 @@ coxmunk documentation
 
    tutorials/basics
    tutorials/applications
+   tutorials/research/index
 
 .. toctree::
    :maxdepth: 3

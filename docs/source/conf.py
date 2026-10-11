@@ -41,6 +41,8 @@ extensions = [
     'sphinx.ext.imgconverter',
     'sphinx_copybutton',
     'sphinxcontrib.mermaid',
+    # PDF/ePub version of the mermaid flowchart (algorithms.rst); needs graphviz
+    'sphinx.ext.graphviz',
     'myst_nb',
     'IPython.sphinxext.ipython_console_highlighting',
 ]
@@ -71,7 +73,9 @@ napoleon_use_rtype = False
 todo_include_todos = True
 
 # the README included in index.rst starts at "##" once its title is skipped
-suppress_warnings = ['myst.header']
+suppress_warnings = ['myst.header',
+                     # ePub: sources (_static/make_logo.py) and graphviz image maps are not packaged
+                     'epub.unknown_project_files']
 
 
 def _cli_usage_as_literal(app, what, name, obj, options, lines):

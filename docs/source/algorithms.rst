@@ -6,20 +6,47 @@ implemented in :py:meth:`coxmunk.coxmunk.sunglint.sunglint`. Each section links
 to the method that implements it. The references are listed in
 :py:mod:`coxmunk.coxmunk`.
 
-.. mermaid::
+.. The flowchart is drawn with mermaid on the web pages and with graphviz in the
+   PDF and ePub, where the mermaid JavaScript cannot run. Keep both in sync.
 
-   flowchart LR
-       G["Geometry<br/>θs, θv, φ"] --> S["Scattering angle Θ<br/>facet tilt θn"]
-       S --> Z["Facet slopes<br/>z_up, z_cr"]
-       W["Wind<br/>U, φw"] --> Z
-       Z --> P["Slope density P"]
-       S --> F["Fresnel matrix R_F(ω)"]
-       F --> R["Rotation to the<br/>scattering plane"]
-       W --> SH["Shadowing SH"]
-       G --> SH
-       P --> O["Stokes vector<br/>I, Q, U, V"]
-       R --> O
-       SH --> O
+.. only:: format_html and not builder_epub
+
+   .. mermaid::
+
+      flowchart LR
+          G["Geometry<br/>θs, θv, φ"] --> S["Scattering angle Θ<br/>facet tilt θn"]
+          S --> Z["Facet slopes<br/>z_up, z_cr"]
+          W["Wind<br/>U, φw"] --> Z
+          Z --> P["Slope density P"]
+          S --> F["Fresnel matrix R_F(ω)"]
+          F --> R["Rotation to the<br/>scattering plane"]
+          W --> SH["Shadowing SH"]
+          G --> SH
+          P --> O["Stokes vector<br/>I, Q, U, V"]
+          R --> O
+          SH --> O
+
+.. only:: not format_html or builder_epub
+
+   .. graphviz::
+      :align: center
+
+      digraph algorithm {
+         rankdir=LR;
+         node [shape=box, style="rounded,filled", fillcolor="#eef3fb", color="#4a6fa5", fontname="DejaVu Sans", fontsize=10];
+         edge [color="#4a6fa5"];
+         G  [label="Geometry\nθs, θv, φ"];
+         S  [label="Scattering angle Θ\nfacet tilt θn"];
+         Z  [label="Facet slopes\nz_up, z_cr"];
+         W  [label="Wind\nU, φw"];
+         P  [label="Slope density P"];
+         F  [label="Fresnel matrix R_F(ω)"];
+         R  [label="Rotation to the\nscattering plane"];
+         SH [label="Shadowing SH"];
+         O  [label="Stokes vector\nI, Q, U, V"];
+         G -> S; S -> Z; W -> Z; Z -> P; S -> F; F -> R;
+         W -> SH; G -> SH; P -> O; R -> O; SH -> O;
+      }
 
 Notation
 --------
