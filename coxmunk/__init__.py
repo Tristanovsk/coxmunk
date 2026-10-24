@@ -1,6 +1,6 @@
 
 __package__ = 'coxmunk'
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 from .coxmunk import sunglint
 from .visu import plot

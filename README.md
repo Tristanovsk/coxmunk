@@ -11,7 +11,7 @@ The sunglint, sunlight reflected by the waves, induces different patterns at dif
 - (d) Sentinel-3 RGB image (10 May 2016) over the eastern Mediterranean Sea, with high sunglint on
   the right side.
 
-![Sunglint patterns at different spatial scales](illustration/research/neukermans2018_fig11_sunglint_scales.jpg)
+![Sunglint patterns at different spatial scales](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/research/neukermans2018_fig11_sunglint_scales.jpg)
 
 Credits: Neukermans, Harmel, Galí et al. (2018). Harnessing remote sensing to address critical
 science questions on ocean-atmosphere interactions. *Elementa*, 6, 71,
@@ -19,46 +19,74 @@ science questions on ocean-atmosphere interactions. *Elementa*, 6, 71,
 
 For more details on the statistics of the wave slopes (i.e., *Probability Distribution Function*), please refer to [Munk 2009](https://www.annualreviews.org/doi/abs/10.1146/annurev.marine.010908.163940).
 
-![image_output](illustration/sunglint_examples_sza3_optimized.gif)
+![image_output](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/sunglint_examples_sza3_optimized.gif)
 
-## Getting Started
+## Installation
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+`coxmunk` requires Python >= 3.9. Its dependencies (numpy, scipy, pandas, xarray, netCDF4,
+matplotlib, cmocean, docopt) are installed automatically by `pip`.
 
-### Prerequisites
-
-Python >= 3.8 and a recent `pip`:
-
-```
-python3 -m pip install --upgrade pip
-```
-
-### Installing
-
-First, clone [the repository](https://github.com/Tristanovsk/coxmunk#) and execute the following command in the
-local copy:
+It is best installed in a virtual environment:
 
 ```
-python3 -m pip install .
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
 ```
 
-For development (editable install, code changes are picked up without reinstalling):
+or in a conda environment:
 
 ```
-python3 -m pip install -e .
+conda create -n coxmunk python=3.12
+conda activate coxmunk
 ```
 
-If you do not have administrator rights, add `--user` (or, preferably, use a virtual environment):
+### From PyPI
 
 ```
-python3 -m pip install --user .
+python -m pip install coxmunk
 ```
 
-This installation is supposed to download
-all the associated packages as well as prepare the executables `coxmunk`.
+### Development version from GitHub
 
-If the installation is successful, you should have:
+The `develop` branch contains the latest changes not yet released:
+
 ```
+python -m pip install "git+https://github.com/Tristanovsk/coxmunk.git@develop"
+```
+
+### From source, for development
+
+Clone [the repository](https://github.com/Tristanovsk/coxmunk) and install it in editable mode
+(code changes are picked up without reinstalling):
+
+```
+git clone https://github.com/Tristanovsk/coxmunk.git
+cd coxmunk
+python -m pip install -e .
+```
+
+Run the tests with:
+
+```
+python -m pip install pytest
+python -m pytest tests
+```
+
+and build the documentation with:
+
+```
+python -m pip install -r docs/requirements.txt
+make -C docs html                  # output in docs/build/html
+```
+
+### Check the installation
+
+The installation provides the `coxmunk` command:
+
+```
+$ coxmunk --version
+coxmunk 1.2.1
 $ coxmunk
 Usage:
   coxmunk <sza> <wind_speed> [--stats <stats>] [--wind_azi <wind_azi>] [--shadow] [--slope] [--figname <figname>]
@@ -229,7 +257,7 @@ See the [polarization](https://coxmunk.readthedocs.io/en/latest/polarization.htm
 
 ## Kumatage: from noise to signal
 
-![Spooner 1822](illustration/kumatage/spooner_1822_lettre_IV.jpg)
+![Spooner 1822](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/kumatage/spooner_1822_lettre_IV.jpg)
 
 In 1822, Spooner named *Kumatage* (from the Greek κυμάτων, *of the waves*, and αὐγή, *splendour*)
 "this remarkable appearance of light" of the Sun reflected by the waves, and established its first
@@ -251,14 +279,14 @@ Examples for [Cox & Munk](https://www.osapublishing.org/josa/abstract.cfm?uri=jo
 $ coxmunk 39 0.2 --stats bh2006 --wind_azi 75 --figname illustration/coxmunk_fig_39_0.2_bh2006_75.png
 ```
 
-![image_output](illustration/coxmunk_fig_39_0.2_bh2006_75.png)
+![image_output](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/coxmunk_fig_39_0.2_bh2006_75.png)
 
 
 ```
 $ coxmunk 39 7.2 --stats bh2006 --wind_azi 75
 ```
 
-![image_output](illustration/coxmunk_fig_39_7.2_bh2006_75.png)
+![image_output](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/coxmunk_fig_39_7.2_bh2006_75.png)
 
 
 
@@ -266,7 +294,7 @@ $ coxmunk 39 7.2 --stats bh2006 --wind_azi 75
 $ coxmunk 39 14.2 --stats bh2006 --wind_azi 75
 ```
 
-![image_output](illustration/coxmunk_fig_39_14.2_bh2006_75.png)
+![image_output](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/coxmunk_fig_39_14.2_bh2006_75.png)
 
 With the option `--slope` you can also check
  the values of wave slopes upwind and crosswind,
@@ -276,4 +304,4 @@ With the option `--slope` you can also check
 $ coxmunk 20 5 --stats bh2006 --wind_azi 60 --slope
 ```
 
-![image_output](illustration/coxmunk_fig_sza20_ws5_wazi60_bh2006--slope.png)
+![image_output](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/coxmunk_fig_sza20_ws5_wazi60_bh2006--slope.png)

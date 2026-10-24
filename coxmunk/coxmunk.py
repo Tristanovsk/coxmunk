@@ -199,8 +199,9 @@ class sunglint:
 
         s_l = M.T @ s
         v_l = M.T @ v
-        sza_l = np.arccos(np.clip(s_l[2], -1, 1))
-        vza_l = np.arccos(np.clip(v_l[2], -1, 1))
+        # arctan2 rather than arccos: accurate near the zenith of the plane
+        sza_l = np.arctan2(np.hypot(s_l[0], s_l[1]), s_l[2])
+        vza_l = np.arctan2(np.hypot(v_l[0], v_l[1]), v_l[2])
         azi_l = (np.arctan2(v_l[1], v_l[0]) - np.arctan2(s_l[1], s_l[0])) % (2 * np.pi)
 
         # rotation between the local and horizontal meridian planes of the viewing direction,
