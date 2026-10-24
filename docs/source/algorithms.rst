@@ -96,7 +96,20 @@ Reflecting facet
 ----------------
 
 The glint seen in a given direction comes from the facets oriented so that the
-Sun is specularly reflected toward the sensor. The scattering angle
+Sun is specularly reflected toward the sensor.
+
+.. figure:: ../../illustration/geometry/sunglint_geometry.png
+   :width: 70%
+   :align: center
+   :alt: Geometry of the specular reflection of the Sun on a sea surface facet
+
+   Geometry of the reflection. The :math:`x` axis points to the Sun azimuth
+   and :math:`\phi` is the relative azimuth of the sensor. The facet normal
+   :math:`\mathbf{n}`, tilted by :math:`\theta_n`, bisects the Sun and sensor
+   directions, both at the angle of incidence :math:`\omega` from
+   :math:`\mathbf{n}`. Drawn with ``illustration/geometry/plot_geometry.py``.
+
+The scattering angle
 (:py:meth:`~coxmunk.coxmunk.sunglint.scat_angle`) is
 
 .. math::
