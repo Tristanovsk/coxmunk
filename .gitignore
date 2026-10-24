@@ -138,3 +138,6 @@ test/
 
 # local scratch notebooks (published ones live in docs/source/tutorials)
 notebook/
+
+# local reference material (papers, slides)
+references/
