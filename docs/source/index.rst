@@ -8,6 +8,7 @@ coxmunk documentation
    :maxdepth: 2
    :caption: Contents:
 
+   installation
    algorithms
    polarization
    wind_speed

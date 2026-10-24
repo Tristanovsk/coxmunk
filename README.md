@@ -27,6 +27,7 @@ For more details on the statistics of the wave slopes (i.e., *Probability Distri
 
 ![image_output](https://raw.githubusercontent.com/Tristanovsk/coxmunk/main/illustration/sunglint_examples_sza3_optimized.gif)
 
+<!-- installation-start -->
 ## Installation
 
 `coxmunk` requires Python >= 3.9. Its dependencies (numpy, scipy, pandas, xarray, netCDF4,
@@ -34,11 +35,10 @@ matplotlib, cmocean, docopt) are installed automatically.
 
 ### With conda
 
-Create a dedicated environment, install the dependencies from conda-forge, then `coxmunk`
-from PyPI:
+Create a dedicated environment and install `coxmunk` in it from PyPI:
 
 ```
-conda create -n coxmunk -c conda-forge python=3.12 numpy scipy pandas xarray netcdf4 matplotlib cmocean docopt
+conda create -n coxmunk python=3.12
 conda activate coxmunk
 pip install coxmunk
 ```
@@ -107,6 +107,8 @@ I, Q, U, V = sunglint(sza=30, vza=30, azi=180).sunglint(ws=5, wazi=0, stats='bh2
 
 The full documentation, with the API reference and tutorials, is on
 [Read the Docs](https://coxmunk.readthedocs.io).
+
+<!-- installation-end -->
 
 ## Model description
 
