@@ -40,13 +40,13 @@ from PyPI:
 ```
 conda create -n coxmunk -c conda-forge python=3.12 numpy scipy pandas xarray netcdf4 matplotlib cmocean docopt
 conda activate coxmunk
-python -m pip install coxmunk
+pip install coxmunk
 ```
 
 ### With pip
 
 ```
-python -m pip install coxmunk
+pip install coxmunk
 ```
 
 ### Development version from GitHub
@@ -54,7 +54,7 @@ python -m pip install coxmunk
 The `develop` branch contains the latest changes not yet released:
 
 ```
-python -m pip install "git+https://github.com/Tristanovsk/coxmunk.git@develop"
+pip install "git+https://github.com/Tristanovsk/coxmunk.git@develop"
 ```
 
 ### From source, for development
@@ -65,20 +65,20 @@ Clone [the repository](https://github.com/Tristanovsk/coxmunk) and install it in
 ```
 git clone https://github.com/Tristanovsk/coxmunk.git
 cd coxmunk
-python -m pip install -e .
+pip install -e .
 ```
 
 Run the tests with:
 
 ```
-python -m pip install pytest
-python -m pytest tests
+pip install pytest
+pytest tests
 ```
 
 and build the documentation with:
 
 ```
-python -m pip install -r docs/requirements.txt
+pip install -r docs/requirements.txt
 make -C docs html                  # output in docs/build/html
 ```
 
