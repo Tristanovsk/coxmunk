@@ -1,5 +1,11 @@
 # coxmunk
 
+[![Tests](https://github.com/Tristanovsk/coxmunk/actions/workflows/pythonpackage.yml/badge.svg?branch=main)](https://github.com/Tristanovsk/coxmunk/actions/workflows/pythonpackage.yml)
+[![Documentation](https://readthedocs.org/projects/coxmunk/badge/?version=latest)](https://coxmunk.readthedocs.io)
+[![PyPI](https://img.shields.io/pypi/v/coxmunk)](https://pypi.org/project/coxmunk/)
+[![Python](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FTristanovsk%2Fcoxmunk%2Fmain%2Fpyproject.toml)](https://github.com/Tristanovsk/coxmunk/blob/main/pyproject.toml)
+[![License: MIT](https://img.shields.io/pypi/l/coxmunk)](https://github.com/Tristanovsk/coxmunk/blob/main/LICENSE)
+
 Simple sunglint computation based on [Cox & Munk](https://www.osapublishing.org/josa/abstract.cfm?uri=josa-44-11-838) model.
 The sunglint, sunlight reflected by the waves, induces different patterns at different spatial
 (or temporal) scales, as in these examples:
