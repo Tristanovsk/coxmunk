@@ -65,10 +65,29 @@ al., 2009), to retrieve wave spectra and ocean currents [Kudryavtsev2017a]_
 [Kudryavtsev2017b]_, to detect internal waves (Jackson, 2007), absorbing aerosols
 (Kaufman et al., 2002) and biofilms at the surface (Neukermans et al., 2018), or
 to map the bathymetry through its modulation of the waves [Shao2011]_.
-Beyond the Earth, simulations show that the intensity and polarization of the
-glint of a star on an exoplanet could reveal the presence of an ocean
-[TreesStam2019]_: the kumatage could help assess the habitability of other
-worlds.
+
+Remote ocean detection
+----------------------
+
+Beyond the Earth, recent simulations showed that the intensity and the
+polarization of the glint of a star on an exoplanet could be measured
+efficiently to detect exo-oceans [TreesStam2019]_. Along the orbit of the
+planet, the glint on an ocean appears as a bright, strongly polarized spot near
+the limb, which is missing on a planet with a black surface under the same
+clouds.
+
+.. figure:: ../../../illustration/history/trees_stam_2019_ocean_planet_glint.jpg
+   :width: 85%
+   :align: center
+   :alt: Simulated flux and polarization of an ocean planet and a black surface planet
+
+   Simulated images of an ocean planet (top) and a black surface planet
+   (bottom) with patchy clouds, at increasing phase angles (left to right): total
+   flux :math:`F` and linearly polarized flux :math:`|Q|`. The glint
+   appears in :math:`|Q|` only on the ocean planet. From [TreesStam2019]_.
+
+As water is a prerequisite for life, the kumatage, or sunglint, could help
+assess the habitability of exoplanets: a new room for (scientific) imagination.
 
 Kumatage or sunglint?
 ---------------------
