@@ -10,23 +10,73 @@ Kumatage, the splendour of the waves
 
    -- J.-M. Quéméner, *La république des pirates*, Plon, 2019
 
-The reflection of the Sun on the sea surface has been, in turn, a hazard for
+For most people, the reflection of the Sun (or Moon) on the sea surface is a
+place for romanticism and reveries. From the beach to space, the sparkling patch
+of light reflected by the waves can be seen by any optical imager, from the
+naked eye to the sensors on board satellites. It has been, in turn, a hazard for
 navigators, a subject for painters, a measurement tool for oceanographers, a
 noise to be removed from satellite images and finally a signal on the state of
-the ocean surface. This History section retraces this story, from the naming
-of the *kumatage* (this page) to the measurements of
-:doc:`Cox and Munk <cox_munk>` and the :doc:`satellite era <satellite_era>`.
-It is adapted from the talk *Scientific
-representation of the Sun reflection on the sea surface: how an unwanted noise
-becomes signal* (T. Harmel, S. Bary, P. Gernez and G. Morin, OCEANEXT 2019
-interdisciplinary conference, Nantes, July 2019,
-`doi:10.13140/RG.2.2.25132.41602 <https://doi.org/10.13140/RG.2.2.25132.41602>`_).
+the ocean surface.
+
+Since the late 1990s, several satellite missions have been dedicated to
+monitoring the water content and marine life from the color of the ocean. Their
+performance was strongly impacted by the sunglint, which overwhelms the signal
+coming from within the water and precludes the retrieval of ocean color or
+bathymetry. Many algorithms were developed to correct for it; far fewer studies
+used the glint as a signal of the sea roughness and of the wind, as Spooner had
+already done two centuries ago.
+
+This History section explores art history and the history of science to follow
+the representations of the reflected light since Spooner, and how the
+scientific community moved between the notions of noise and signal: from the
+Greek colors of the sea and the naming of the *kumatage* (this page) to the
+measurements of :doc:`Cox and Munk <cox_munk>` and the
+:doc:`satellite era <satellite_era>`, up to exoplanets. It is adapted from the
+talk *Scientific representation of the Sun reflection on the sea surface: how an
+unwanted noise becomes signal* (T. Harmel, GET Toulouse; S. Bary, MNHN Paris;
+P. Gernez, Université de Nantes; G. Morin, GET Toulouse), given at the OCEANEXT
+2019 interdisciplinary conference, Nantes, July 2019
+(`doi:10.13140/RG.2.2.25132.41602 <https://doi.org/10.13140/RG.2.2.25132.41602>`_),
+and as a seminar in Toulouse in November 2019.
 
 .. figure:: ../../../illustration/kumatage/turner_1845_sunrise_with_sea_monsters.jpg
    :width: 100%
    :alt: Sunrise with sea monsters, J. M. W. Turner
 
    *Sunrise with Sea Monsters*, J. M. W. Turner, c. 1845 (Tate, London).
+
+Before the word: the Greek colors of the sea
+--------------------------------------------
+
+In Homer, the sea is never blue. The open sea is *wine-like* (οἶνοψ) or
+*violet* (ἰοειδής); its waves are *purple* (πορφύρεος), *black* or *dark*
+(μέλας, κελαινός), *grey* or *whitened* (πολιός), and the calm sea is *white*
+(λευκός). A deep, dark blue (κυάνεος) only appears at the end of the archaic
+period, with Bacchylides. In the 19th century, W. Gladstone (1858) and then
+F. Nietzsche (*Daybreak*, 1881) took this as evidence that the Greeks could not
+see blue. A. Grand-Clément argues instead that these words describe the
+*state* of the sea and the feelings it inspired more than a hue
+[GrandClement2013]_.
+
+Many of these words are about **light reflected by the surface** as much as about
+color:
+
+* the *white* sea (λευκός) is the smooth, limpid sea of a calm (γαλήνη), as in
+  the sheltered harbour where Ulysses' ships come to land;
+* γλαυκός, later "blue-grey", first meant *gleaming*, *shining*. Applied to the
+  sea, it describes a surface that shines with a cruel, threatening glare;
+* the *wine-dark* sea (οἶνοψ) refers to wine served in opaque ceramic cups. It
+  appears as a dark, shimmering surface whose reflections, when stirred, recall
+  the waves. In Homer it is mostly a stormy sea;
+* the *purple* sea was explained by the treatise *On Colours* attributed to
+  Aristotle as an effect of the rays of the Sun. Modern philologists see in it
+  the reflection of the glowing sky before sunrise or after sunset.
+
+Isidore of Seville (*Etymologies*, XIII, 14) came closest to the physics. For
+him, water itself has no color: it is the wind, animating the surface, that
+creates the changing shades of the sea, now yellow or reddish, now clear and
+bright, now dark. Thirteen centuries later, Cox and Munk turned this intuition
+into a measurement.
 
 The word: Kumatage
 ------------------
@@ -90,7 +140,7 @@ Light, photography and painting
 -------------------------------
 
 Spooner's kumatage belongs to a century that changed the representation of
-light. The wave theory of light grew from Fresnel's manuscript *Rêveries* (1815)
+light. The wave theory of light grew from Fresnel's manuscript *Rêveries* (1814)
 to Maxwell's equations; Niépce obtained the first photographic images (1816);
 and painters abandoned classicism to depict light in its changing qualities, a
 movement named after Monet's *Impression, soleil levant* (1872), in which the
@@ -113,3 +163,10 @@ the phenomenon kept fascinating painters but lost its name.
 
 The name was forgotten, but not the phenomenon: a century later,
 :doc:`Cox and Munk <cox_munk>` turned it into a measurement.
+
+References
+----------
+
+.. [GrandClement2013] Grand-Clément, A. (2013). La mer pourpre : façons grecques
+   de voir en couleurs. Représentations littéraires du chromatisme marin à
+   l'époque archaïque. *Pallas*, 92, 143-161.

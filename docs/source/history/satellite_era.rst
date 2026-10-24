@@ -81,6 +81,13 @@ Kumatage or sunglint?
   turning a noise into a signal on the ocean surface.
 * It is now up to you to choose between kumatage and sunglint.
 
+.. figure:: ../../../illustration/history/ernst_1931_mer_et_soleil_lignes_de_navigation.jpg
+   :width: 70%
+   :align: center
+   :alt: Mer et soleil, lignes de navigation, Max Ernst, 1931
+
+   *Mer et soleil - Lignes de navigation*, Max Ernst, 1931.
+
 References
 ----------
 
