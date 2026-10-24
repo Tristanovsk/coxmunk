@@ -110,7 +110,7 @@ pygments_style = 'sphinx'
 
 html_theme_options = {
     'repository_url': 'https://github.com/Tristanovsk/coxmunk',
-    'repository_branch': 'master',
+    'repository_branch': 'main',
     'path_to_docs': 'docs/source',
     'use_repository_button': True,
     'use_issues_button': True,
