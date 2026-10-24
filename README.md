@@ -30,24 +30,20 @@ For more details on the statistics of the wave slopes (i.e., *Probability Distri
 ## Installation
 
 `coxmunk` requires Python >= 3.9. Its dependencies (numpy, scipy, pandas, xarray, netCDF4,
-matplotlib, cmocean, docopt) are installed automatically by `pip`.
+matplotlib, cmocean, docopt) are installed automatically.
 
-It is best installed in a virtual environment:
+### With conda
 
-```
-python3 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-python -m pip install --upgrade pip
-```
-
-or in a conda environment:
+Create a dedicated environment, install the dependencies from conda-forge, then `coxmunk`
+from PyPI:
 
 ```
-conda create -n coxmunk python=3.12
+conda create -n coxmunk -c conda-forge python=3.12 numpy scipy pandas xarray netcdf4 matplotlib cmocean docopt
 conda activate coxmunk
+python -m pip install coxmunk
 ```
 
-### From PyPI
+### With pip
 
 ```
 python -m pip install coxmunk
